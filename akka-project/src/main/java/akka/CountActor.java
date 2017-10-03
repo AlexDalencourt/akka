@@ -11,19 +11,11 @@ public class CountActor extends AbstractActor {
 		return Props.create(CountActor.class, () -> new CountActor());
 	}
 	
-	static public class Greeting {	
-		public final String message;
-		
-		public Greeting(String message) {
-			this.message = message;
-		}
-	}
-	
 	private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 	
 	@Override
 	public Receive createReceive() {
-		return receiveBuilder().match(Greeting.class, greeting -> {log.info(greeting.message);}).build();
+		return receiveBuilder().match(TextToParseMessage.class, message -> {log.info(message.getTextToParse());}).build();
 	}
 
 }
