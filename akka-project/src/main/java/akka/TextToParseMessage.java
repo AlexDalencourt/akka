@@ -17,4 +17,12 @@ public class TextToParseMessage {
 	public String getTextToParse() {
 		return textToParse;
 	}
+	
+	public String getLeftPart() {
+		return textToParse.substring(0, textToParse.length()/2);
+	}
+	
+	public String getRightPart() {
+		return textToParse.substring(textToParse.length()/2);
+	}
 }
