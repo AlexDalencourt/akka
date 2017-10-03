@@ -2,6 +2,7 @@ package akka;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
+import akka.actor.Props;
 
 /**
  * Divise le text en deux et l'envoie à ses sous entité attend enfin le retour des sous entités.
@@ -11,6 +12,10 @@ import akka.actor.ActorRef;
  */
 public class NodeActor extends AbstractActor {
 
+	public static Props props(ActorRef left, ActorRef right) {
+		return Props.create(AbstractActor.class, () -> new NodeActor(left, right));
+	}
+	
 	private final ActorRef left;
 	private boolean leftReturn;
 	private final ActorRef right;
