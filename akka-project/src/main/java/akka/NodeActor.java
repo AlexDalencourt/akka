@@ -39,6 +39,7 @@ public class NodeActor extends AbstractActor {
 						message -> {
 							count = 0;
 							sender = getSender();
+							System.out.println("Node " + "Message à parser");
 							left.tell(new TextToParseMessage(message.getLeftPart(), message.getPatternToMatch()), getSelf());
 							leftReturn = true;
 							right.tell(new TextToParseMessage(message.getRightPart(), message.getPatternToMatch()), getSelf());

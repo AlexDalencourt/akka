@@ -12,7 +12,7 @@ public class Process {
 		final ActorSystem system = ActorSystem.create("AKKA");
 		final Scanner scan = new Scanner(System.in);
 		
-		int nb_proccess = 2;
+		int nb_proccess = 8;
 
 		List<ActorRef> actors = new ArrayList<>();
 		for(int i = 0; i < nb_proccess; i++) {
@@ -22,14 +22,18 @@ public class Process {
 		while(actors.size() > 1) {
 			ActorRef left = actors.remove(0);
 			ActorRef right = actors.remove(0);
+			System.out.println("Fusion : " + left.path().name() + " - " + right.path().name());
 			actors.add(system.actorOf(NodeActor.props(left, right)));
+			System.out.println("Node créée" + actors.get(actors.size() - 1).path().name());
 		}
-		ActorRef root = system.actorOf(RootActor.props(actors.get(0)));
+		ActorRef root = system.actorOf(RootActor.props(actors.get(0)), "root");
 		
 		String message = scan.nextLine();
 		String pattern = scan.nextLine();
 		
 		root.tell(new TextToParseMessage(message, pattern), ActorRef.noSender());
+		
+		scan.nextLine();
 		
 		system.terminate();
 	}
