@@ -15,12 +15,16 @@ public class NodeActor extends AbstractActor {
 	private boolean leftReturn;
 	private final ActorRef right;
 	private boolean rightReturn;
+	private ActorRef sender;
+	private int count;
 	
 	public NodeActor(ActorRef left, ActorRef right) {
 		this.left = left;
 		this.leftReturn = false;
 		this.right = right;
 		this.rightReturn = false;
+		this.sender = null;
+		this.count = 0;
 	}
 	
 	@Override
@@ -28,11 +32,25 @@ public class NodeActor extends AbstractActor {
 		return receiveBuilder()
 				.match(TextToParseMessage.class, 
 						message -> {
+							count = 0;
+							sender = getSender();
 							left.tell(new TextToParseMessage(message.getLeftPart(), message.getPatternToMatch()), getSelf());
 							leftReturn = true;
 							right.tell(new TextToParseMessage(message.getRightPart(), message.getPatternToMatch()), getSelf());
 							rightReturn = true;
-						}).build();
+						})
+				.match(CountReturnMessage.class, 
+						message -> {
+							if(getSender() == left) {
+								leftReturn = true;
+							}else {
+								rightReturn = true;
+							}
+							count += message.getCount();
+							if(!leftReturn && !rightReturn) {
+								sender.tell(new CountReturnMessage(count), getSelf());
+							}
+				}).build();
 	}
 
 }
