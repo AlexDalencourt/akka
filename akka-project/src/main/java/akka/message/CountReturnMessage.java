@@ -1,4 +1,4 @@
-package akka;
+package akka.message;
 
 public class CountReturnMessage {
 	private int count;

@@ -1,11 +1,13 @@
-package akka;
+package akka.actor;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
+import akka.message.CountReturnMessage;
+import akka.message.TextToParseMessage;
 
 /**
- * Divise le text en deux et l'envoie à ses sous entité attend enfin le retour des sous entités.
+ * Divise le text en deux et l'envoie Ã  ses sous entitÃ© attend enfin le retour des sous entitÃ©s.
  * 
  * @author dalencourt
  *
@@ -39,18 +41,20 @@ public class NodeActor extends AbstractActor {
 						message -> {
 							count = 0;
 							sender = getSender();
-							System.out.println("Node " + "Message à parser");
 							left.tell(new TextToParseMessage(message.getLeftPart(), message.getPatternToMatch()), getSelf());
 							leftReturn = true;
-							right.tell(new TextToParseMessage(message.getRightPart(), message.getPatternToMatch()), getSelf());
-							rightReturn = true;
+							String textToSend = message.getRightPart();
+							if(textToSend != null){
+								right.tell(new TextToParseMessage(textToSend, message.getPatternToMatch()), getSelf());
+								rightReturn = true;
+							}
 						})
 				.match(CountReturnMessage.class, 
 						message -> {
 							if(getSender() == left) {
-								leftReturn = true;
+								leftReturn = false;
 							}else {
-								rightReturn = true;
+								rightReturn = false;
 							}
 							count += message.getCount();
 							if(!leftReturn && !rightReturn) {

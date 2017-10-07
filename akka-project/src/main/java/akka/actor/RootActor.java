@@ -1,8 +1,10 @@
-package akka;
+package akka.actor;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
+import akka.message.CountReturnMessage;
+import akka.message.TextToParseMessage;
 
 public class RootActor extends AbstractActor {
 
