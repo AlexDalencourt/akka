@@ -1,5 +1,8 @@
 # akka
 
+__DALENCOURT ALEX__
+__DOS SANTOS DA FONTE STEPHANE__
+
 ### Processus 
 
 La classe Process.java contient le main de l'application.
